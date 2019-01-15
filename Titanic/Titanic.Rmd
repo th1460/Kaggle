@@ -69,8 +69,9 @@ train %>% count(Pclass, Survived) %>%
   group_by(Pclass) %>% 
   mutate(total = sum(n)) %>% 
   ggplot(aes(Pclass, n * 100/total, fill = Survived)) + geom_col() +
-  labs(x = "Ticket class", y = "%", fill = "Survived") +
-  ggtitle(cat(fig_nums("pclass", "Percentual distribution of survivors according to ticket class")))
+  theme_light() +
+  labs(x = "Ticket class", y = "%", fill = "Survived", 
+       caption = fig_nums("pclass", "Percentual distribution of survivors according to ticket class"))
 
 ```
 
@@ -79,13 +80,15 @@ The model shows the odds to survive in the third class is `r round((1 - exp(-1.6
 ```{r}
 
 require(knitr)
+require(kableExtra)
 
 model <-
   glm(Survived ~ Pclass, family = binomial, data = train)
 
 model %>%
   summary() %$% coefficients %>% 
-  kable(caption = cat(table_nums("pclass", "Model estimation")))
+  kable(caption = table_nums("pclass", "Model estimation")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
   
 ```
 
@@ -99,8 +102,9 @@ train %>% count(Sex, Survived) %>%
   group_by(Sex) %>% 
   mutate(total = sum(n)) %>% 
   ggplot(aes(Sex, n * 100/total, fill = Survived)) + geom_col() +
-  labs(x = "Sex", y = "%", fill = "Survived") + 
-  ggtitle(cat(fig_nums("sex", "Percentual distribution of survivors according to sex")))
+  theme_light() +
+  labs(x = "Sex", y = "%", fill = "Survived", 
+       caption = fig_nums("sex", "Percentual distribution of survivors according to sex"))
 
 ```
 
@@ -113,7 +117,8 @@ model <-
 
 model %>%
   summary() %$% coefficients %>% 
-  kable(caption = cat(table_nums("sex", "Estimativas do modelo")))
+  kable(caption = table_nums("sex", "Estimativas do modelo")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
   
 ```
 
@@ -128,7 +133,8 @@ model <-
 
 model %>%
   summary() %$% coefficients %>% 
-  kable(caption = cat(table_nums("pclass_sex", "Model estimation")))
+  kable(caption = table_nums("pclass_sex", "Model estimation")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
 
@@ -147,8 +153,9 @@ newdata %<>%
 
 newdata %>% 
   ggplot(aes(Sex, Pihat, group = Pclass, colour = Pclass)) + geom_line() + geom_point() +
-  labs(x = "Sex", y = expression(pi(Survived == yes)), colour = "Ticket Class") +
-  ggtitle(cat(fig_nums("pclass_sex", "Interaction between sex and ticket class")))
+  theme_light() +
+  labs(x = "Sex", y = expression(pi(Survived == yes)), colour = "Ticket Class",
+       caption = fig_nums("pclass_sex", "Interaction between sex and ticket class"))
 
 ```
 
@@ -160,7 +167,8 @@ There is no difference between the distribution of age according to survived sta
 
 train %>% 
   ggplot(aes(Survived, Age)) + geom_boxplot() +
-  ggtitle(cat(fig_nums("age", "Distribution of age according to survived status")))
+  theme_light() +
+  labs(caption = fig_nums("age", "Distribution of age according to survived status"))
 
 ```
 
@@ -173,7 +181,8 @@ model <-
 
 model %>%
   summary() %$% coefficients %>% 
-  kable(caption = cat(table_nums("age", "Model estimation")))
+  kable(caption = table_nums("age", "Model estimation")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
   
 ```
 
@@ -188,6 +197,7 @@ model <-
 
 model %>%
   summary() %$% coefficients %>% 
-  kable(caption = cat(table_nums("pclass_age", "Model estimation")))
+  kable(caption = table_nums("pclass_age", "Model estimation")) %>% 
+  kable_styling(bootstrap_options = c("striped", "hover"))
 
 ```
